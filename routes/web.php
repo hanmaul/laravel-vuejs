@@ -48,6 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::prefix('/jurusan')->group(function(){
         Route::get('/fakultas', [JurusanController::class, 'getFakultas'])->name('jurusan.fakultas');
         Route::post('/prodi', [JurusanController::class, 'getProdi'])->name('jurusan.prodi');
+        Route::get('/vue', [JurusanController::class, 'fakultas'])->name('jurusan.get');
     });
 
 });

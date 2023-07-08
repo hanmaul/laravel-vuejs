@@ -27,7 +27,7 @@
     </modal>
 </template>
 
-<script>
+<!-- <script>
     import Modal from './Modal.vue'
 
     export default {
@@ -58,4 +58,30 @@
             },
         }
     }
+</script> -->
+
+<script setup>
+    import Modal from './Modal.vue';
+
+    const emit = defineEmits(['close']);
+
+    const props = defineProps({
+        show: {
+            default: false
+        },
+        maxWidth: {
+            default: '2xl'
+        },
+        closeable: {
+            default: true
+        },
+        footer: {
+            default:true
+        },
+    });
+
+    function close() {
+        emit('close')
+    }
+
 </script>

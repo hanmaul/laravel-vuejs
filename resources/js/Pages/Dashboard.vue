@@ -42,12 +42,12 @@ const listMahasiswa = ref({})
 const getMahasiswa = () => {
     listMahasiswa.value = {}
     listMahasiswaLoading.value = true
-    axios.get(route('mahasiswa.data')).then(res => {
+    axios.get('http://127.0.0.1:8000/api/mahasiswa').then(res => {
         const data = res.data
         listMahasiswa.value = data
         listMahasiswaLoading.value = false
     }).catch(err => {
-        alert(`Get Data Failed!\n\nError: ${err}`)
+        alert(`Gagal mengambil data mahasiswa!\n\nError: ${err}`)
     })
 }
 //... show modal detail Mahasiswa (All Field) ... 
@@ -63,7 +63,7 @@ const modalDetailMahasiswa = (data) => {
 const listFakultas = ref(false)
 const getFakultas = () => {
     listFakultas.value = false
-    axios.get(route('jurusan.fakultas')).then(res => {
+    axios.get('http://127.0.0.1:8000/api/jurusan/fakultas').then(res => {
         const data = res.data
         listFakultas.value = data
     }).catch(err => {
@@ -74,17 +74,15 @@ const getFakultas = () => {
 // (cRud) get Prodi
 const listProdi = ref(false)
 const getProdi = () => {
-    listProdi.value = false
-    axios.post(route('jurusan.prodi'), {
-        fakultas_id: formMahasiswa.fakultas_id,
-    }).then(res => {
+    listProdi.value = false 
+const fk_id = formMahasiswa.fakultas_id     // API Route
+    axios.post(`http://127.0.0.1:8000/api/jurusan/prodi?fakultas_id=${fk_id}`).then(res => {
         const data = res.data
         listProdi.value = data
     }).catch(err => {
         alert(`Gagal mengambil data Prodi\n\nError: ${err}`)
     })
 }
-
 //... 
 watch(() => formMahasiswa.fakultas_id, () => {
     getProdi()
@@ -96,7 +94,7 @@ const saveMahasiswa = () => {
     formMahasiswa.transform(data => ({
         ...data,
         mahasiswa_id: mahasiswa_id.value
-    })).post(route('mahasiswa.save'), {
+    })).post('http://127.0.0.1:8000/api/mahasiswa/save', {
         onSuccess: () => {
             modalMahasiswaOpen.value = false
             resetFormMahasiswa()
@@ -129,7 +127,7 @@ const updateMahasiswa = () => {
 const deleteMahasiswa = () => {
     if (confirm('Yakin ingin dihapus?')) {
         const mahasiswa_id = detailMahasiswa.value.id
-        axios.delete(route('mahasiswa.delete', { mahasiswa_id })).then(() => {
+        axios.delete(`http://127.0.0.1:8000/api/mahasiswa/delete?mahasiswa_id=${mahasiswa_id}`).then(() => {
             alert(`Berhasil dihapus`)
             modalMahasiswaOpen.value = false
             resetFormMahasiswa()
@@ -341,8 +339,9 @@ const deleteMahasiswa = () => {
                     <PrimaryButton @click="saveMahasiswa()" type="PrimaryButton" :disabled="formMahasiswa.processing"
                         class="rounded-md px-2 py-1 bg-green-600 hover:bg-green-700 text-white">
                         {{ formMahasiswa.processing ? 'Loading' : 'Simpan' }}
-                </PrimaryButton>
-            </template>
-        </div>
-    </template>
-</DialogModal></template>
+                    </PrimaryButton>
+                </template>
+            </div>
+        </template>
+    </DialogModal>
+</template>

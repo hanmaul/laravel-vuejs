@@ -7,7 +7,7 @@ use App\Models\Fakultas;
 use App\Models\Prodi;
 use Inertia\Inertia;
 
-class JurusanController extends Controller
+class ApiJurusanController extends Controller
 {
     public function getFakultas()
     {
@@ -22,8 +22,4 @@ class JurusanController extends Controller
         return $data;
     }
 
-    public function fakultas()
-    {
-        return Inertia::render('vue');
-    }
 }
